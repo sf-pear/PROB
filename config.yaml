@@ -1,0 +1,9 @@
+# set defaults in main_open_world.py
+dataset:
+  dataset_dir: "fathomnet"
+  total_classes: 21 # add 1 to total for "unknown" class 
+  data_root: 
+  image_ext: ".png"
+wandb:
+  username: "spereira"
+  project_name: "fathomnet"

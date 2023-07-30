@@ -129,10 +129,10 @@ def get_args_parser():
     parser.add_argument('--nc_loss_coef', default=2, type=float)
     parser.add_argument('--train_set', default='', help='training txt files')
     parser.add_argument('--test_set', default='', help='testing txt files')
-    parser.add_argument('--num_classes', default=81, type=int)
+    parser.add_argument('--num_classes', default=21, type=int)
     parser.add_argument('--nc_epoch', default=0, type=int)
     parser.add_argument('--dataset', default='OWDETR', help='defines which dataset is used. Built for: {TOWOD, OWDETR, VOC2007}')
-    parser.add_argument('--data_root', default='./data/OWOD', type=str)
+    parser.add_argument('--data_root', default='/home/sabrina/code/PROB/data/OWOD', type=str)
     parser.add_argument('--unk_conf_w', default=1.0, type=float)
 
     ################ PROB OWOD ################
@@ -141,7 +141,7 @@ def get_args_parser():
     
     # logging
     parser.add_argument('--wandb_name', default='', type=str)
-    parser.add_argument('--wandb_project', default='PROB_OWOD', type=str)
+    parser.add_argument('--wandb_project', default='fathomnet', type=str)
     
     # model hyperparameters
     parser.add_argument('--obj_loss_coef', default=1, type=float)
@@ -162,9 +162,9 @@ def get_args_parser():
 def main(args):
     if len(args.wandb_project)>0:
         if len(args.wandb_name)>0:
-            wandb.init(project=args.wandb_project, entity="marvl", group=args.wandb_name)
+            wandb.init(project=args.wandb_project, entity="spereira", group=args.wandb_name)
         else:
-            wandb.init(project=args.wandb_project, entity="marvl")
+            wandb.init(project=args.wandb_project, entity="spereira")
         wandb.config = args
     #else:
     #    wandb=None
