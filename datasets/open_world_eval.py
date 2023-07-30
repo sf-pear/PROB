@@ -274,7 +274,8 @@ def parse_rec(filename, known_classes):
         if cls_name not in known_classes:
             cls_name = 'unknown'
         obj_struct['name'] = cls_name
-        obj_struct['difficult'] = int(obj.find('difficult').text)
+        # obj_struct['difficult'] = int(obj.find('difficult').text)
+        obj_struct['difficult'] = 0
         bbox = obj.find('bndbox')
         obj_struct['bbox'] = [int(bbox.find('xmin').text),
                               int(bbox.find('ymin').text),
@@ -349,6 +350,9 @@ def voc_eval(detpath,
             lines = f.readlines()
     imagenames = [x.strip() for x in lines]
 
+    # print('imagesetfile',imagesetfile, '\n\n')
+    # print('imagenames',imagenames)
+
     # import pdb;pdb.set_trace()
     # load annots
     recs = {}
@@ -384,6 +388,7 @@ def voc_eval(detpath,
 
     # import pdb;pdb.set_trace()
     splitlines = [x.strip().split(' ') for x in lines]
+    # print('splitlines', splitlines)
     image_ids = [x[0] for x in splitlines]
     confidence = np.array([float(x[1]) for x in splitlines])
     if len(splitlines) == 0:
@@ -396,6 +401,7 @@ def voc_eval(detpath,
 
     # sort by confidence
     sorted_ind = np.argsort(-confidence)
+    # print('sorted_ind', sorted_ind)
     BB = BB[sorted_ind, :]
 
     # import pdb;pdb.set_trace()
