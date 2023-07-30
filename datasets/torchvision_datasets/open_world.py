@@ -99,6 +99,26 @@ T4_CLASS_NAMES = [
 VOC_COCO_CLASS_NAMES["TOWOD"] = tuple(itertools.chain(VOC_CLASS_NAMES, T2_CLASS_NAMES, T3_CLASS_NAMES, T4_CLASS_NAMES, UNK_CLASS))
 VOC_COCO_CLASS_NAMES["VOC2007"] = tuple(itertools.chain(VOC_CLASS_NAMES, T2_CLASS_NAMES, T3_CLASS_NAMES, T4_CLASS_NAMES, UNK_CLASS))
 
+# fathom net class names
+T1_CLASS_NAMES = [
+    'Urchin', 'Fish', 'Sea star', 'Anemone', 'Sea cucumber', 
+    'Sea pen', 'Sea fan', 'Worm', 'Crab', 'Gastropod'
+]
+
+T2_CLASS_NAMES = [
+    'Shrimp', 'Soft coral'
+]
+
+T3_CLASS_NAMES = [
+    'Glass sponge', 'Feather star'
+]
+
+T4_CLASS_NAMES = [
+    'Eel', 'Squat lobster', 'Barnacle', 'Stony coral', 'Black coral', 'Sea spider'
+]
+
+VOC_COCO_CLASS_NAMES["fathomnet"] = tuple(itertools.chain(T1_CLASS_NAMES, T2_CLASS_NAMES, T3_CLASS_NAMES, T4_CLASS_NAMES, UNK_CLASS))
+
 
 print(VOC_COCO_CLASS_NAMES)
 
@@ -170,12 +190,12 @@ class OWDetection(VisionDataset):
                     current_file_names.append(file)
 
             self.image_set.extend(current_file_names)
-            self.images.extend([os.path.join(image_dir, x + ".jpg") for x in current_file_names])
+            self.images.extend([os.path.join(image_dir, x + ".png") for x in current_file_names])
             self.annotations.extend([os.path.join(annotation_dir, x + ".xml") for x in current_file_names])
             self.imgids.extend(self.convert_image_id(x, to_integer=True) for x in current_file_names)
         else: 
             self.image_set.extend(file_names)
-            self.images.extend([os.path.join(image_dir, x + ".jpg") for x in file_names])
+            self.images.extend([os.path.join(image_dir, x + ".png") for x in file_names])
             self.annotations.extend([os.path.join(annotation_dir, x + ".xml") for x in file_names])
             self.imgids.extend(self.convert_image_id(x, to_integer=True) for x in file_names)
             
@@ -192,14 +212,16 @@ class OWDetection(VisionDataset):
     @staticmethod
     def convert_image_id(img_id, to_integer=False, to_string=False, prefix='2021'):
         if to_integer:
-            return int(prefix + img_id.replace('_', ''))
+            return int(img_id)
+            # return int(prefix + img_id.replace('_', ''))
         if to_string:
             x = str(img_id)
-            assert x.startswith(prefix)
-            x = x[len(prefix):]
-            if len(x) == 12 or len(x) == 6:
-                return x
-            return x[:4] + '_' + x[4:]
+            return x
+            # assert x.startswith(prefix)
+            # x = x[len(prefix):]
+            # if len(x) == 12 or len(x) == 6:
+            #     return x
+            # return x[:4] + '_' + x[4:]
 
     @functools.lru_cache(maxsize=None)
     def load_instances(self, img_id):
@@ -261,7 +283,7 @@ class OWDetection(VisionDataset):
         # Label known instances the corresponding label and unknown instances as unknown.
         prev_intro_cls = self.args.PREV_INTRODUCED_CLS
         curr_intro_cls = self.args.CUR_INTRODUCED_CLS
-        total_num_class = self.args.num_classes #81
+        total_num_class = self.args.num_classes #81 # sabrina updated to 21 
         known_classes = range(0, prev_intro_cls+curr_intro_cls)
         entry = copy.copy(target)
         for annotation in  copy.copy(entry):
