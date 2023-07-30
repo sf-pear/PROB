@@ -159,6 +159,20 @@ bash run_slurm.sh
 ```
 **note: you may need to give permissions to the .sh files under the 'configs' and 'tools' directories by running `chmod +x *.sh` in each directory.
 
+#### Training on custom data
+
+Let's say you want to add a dataset "DATASET_A". Then you need to:
+
+1. Add to the dictionary VOC_COCO_CLASS_NAMES a key-value pair: VOC_COCO_CLASS_NAMES["DATASET_A"]=["a","b","c",...]
+2. Store DATASET_A's images under "data/OWOD/JPEGImages/DATASET_A/"
+3. Store DATASET_A's Annotations under "data/OWOD/Annotations/DATASET_A/"
+4. Store DATASET_A's ImageSets files under "data/OWOD/ImageSets/DATASET_A/"
+5. When you train, the input --dataset should be set to DATASET_A (e.g., --dataset DATASET_A)
+
+Other files to change:
+- `configs/M_OWOD_BENCHMARK.sh` update all paths to point to the correct ImageSet files
+- `/home/sabrina/code/PROB/run.sh` update the number of GPUs you have in your machine
+
 ### Hyperparameters for different systems
 
 <table align="center">
