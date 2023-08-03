@@ -2,8 +2,10 @@
 dataset:
   dataset_dir: "fathomnet"
   total_classes: 21 # add 1 to total for "unknown" class 
-  data_root: 
+  data_root: '/home/sabrina/code/PROB/data/OWOD'
   image_ext: ".png"
 wandb:
   username: "spereira"
-  project_name: "fathomnet"
+  project_name: "deepsea-unknown"
+predictions:
+  output_dir: "exps/FATHOMNET/predictions"
