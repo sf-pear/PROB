@@ -4,18 +4,18 @@ echo running training of prob-detr, fathomnet dataset
 
 set -x
 
-EXP_DIR=exps/MOWODB/PROB
+EXP_DIR=exps/FATHOMNET
 PY_ARGS=${@:1}
 WANDB_NAME=fathomnet
 
-# # train task 1
-# python -u main_open_world.py \
-#     --output_dir "${EXP_DIR}/t1" --dataset fathomnet --PREV_INTRODUCED_CLS 0 --CUR_INTRODUCED_CLS 10\
-#     --train_set 'task1_train' --test_set 'all_test' --epochs 41\
-#     --model_type 'prob' --obj_loss_coef 8e-4 --obj_temp 1.3\
-#     --wandb_name "${WANDB_NAME}_t1" --exemplar_replay_selection --exemplar_replay_max_length 850\
-#     --exemplar_replay_dir ${WANDB_NAME} --exemplar_replay_cur_file "task1_train_ft.txt"\
-#     ${PY_ARGS}
+# train task 1
+python -u main_open_world.py \
+    --output_dir "${EXP_DIR}/t1" --dataset fathomnet --PREV_INTRODUCED_CLS 0 --CUR_INTRODUCED_CLS 10\
+    --train_set 'task1_train' --test_set 'all_test' --epochs 41\
+    --model_type 'prob' --obj_loss_coef 8e-4 --obj_temp 1.3\
+    --wandb_name "${WANDB_NAME}_t1" --exemplar_replay_selection --exemplar_replay_max_length 850\
+    --exemplar_replay_dir ${WANDB_NAME} --exemplar_replay_cur_file "t1_ft.txt"\
+    ${PY_ARGS}
     
 # train task 2
 PY_ARGS=${@:1}
@@ -25,7 +25,7 @@ python -u main_open_world.py \
     --model_type 'prob' --obj_loss_coef 8e-4 --obj_temp 1.3 --freeze_prob_model\
     --wandb_name "${WANDB_NAME}_t2"\
     --exemplar_replay_selection --exemplar_replay_max_length 1743 --exemplar_replay_dir ${WANDB_NAME}\
-    --exemplar_replay_prev_file "task1_train_ft.txt" --exemplar_replay_cur_file "task2_train_ft.txt"\
+    --exemplar_replay_prev_file "t1_ft.txt" --exemplar_replay_cur_file "t2_ft.txt"\
     --pretrain "${EXP_DIR}/t1/checkpoint0040.pth" --lr 2e-5\
     ${PY_ARGS}
     
@@ -33,7 +33,7 @@ python -u main_open_world.py \
 PY_ARGS=${@:1}
 python -u main_open_world.py \
     --output_dir "${EXP_DIR}/t2_ft" --dataset fathomnet --PREV_INTRODUCED_CLS 10 --CUR_INTRODUCED_CLS 2 \
-    --train_set "${WANDB_NAME}/task2_train_ft" --test_set 'all_test' --epochs 111 --lr_drop 40\
+    --train_set "${WANDB_NAME}/t2_ft" --test_set 'all_test' --epochs 111 --lr_drop 40\
     --model_type 'prob' --obj_loss_coef 8e-4 --obj_temp 1.3\
     --wandb_name "${WANDB_NAME}_t2_ft"\
     --pretrain "${EXP_DIR}/t2/checkpoint0050.pth"\
@@ -84,3 +84,15 @@ python -u main_open_world.py \
 #     --wandb_name "${WANDB_NAME}_t4_ft"\
 #     --pretrain "${EXP_DIR}/t4/checkpoint0190.pth" \
 #     ${PY_ARGS}
+
+# eval test
+PY_ARGS=${@:1}
+python -u main_open_world.py \
+    --output_dir "${EXP_DIR}/test" --dataset fathomnet --PREV_INTRODUCED_CLS 10 --CUR_INTRODUCED_CLS 2\
+    --train_set 'task2_train' --test_set 'all_test' --epochs 51\
+    --model_type 'prob' --obj_loss_coef 8e-4 --obj_temp 1.3 --freeze_prob_model\
+    --wandb_name "${WANDB_NAME}_t2"\
+    --exemplar_replay_selection --exemplar_replay_max_length 1743 --exemplar_replay_dir ${WANDB_NAME}\
+    --exemplar_replay_prev_file "task1_train_ft.txt" --exemplar_replay_cur_file "task2_train_ft.txt"\
+    --pretrain "${EXP_DIR}/t1/checkpoint0039.pth" --lr 2e-5 --eval \
+    ${PY_ARGS}
