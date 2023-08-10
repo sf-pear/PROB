@@ -14,6 +14,7 @@ import math
 import os
 import sys
 from typing import Iterable
+import json
  
 import torch
 import util.misc as utils
@@ -125,6 +126,11 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
             target_sizes = torch.stack([t["size"] for t in targets], dim=0)
             results = postprocessors['segm'](results, outputs, orig_target_sizes, target_sizes)
         res = {target['image_id'].item(): output for target, output in zip(targets, results)}
+        
+        # # save bbox results
+        # with open(f'{args.wandb_name}.txt', 'a') as f:
+        #     f.write(json.dumps(res) + '\n')
+        
         if coco_evaluator is not None:
             coco_evaluator.update(res)
  
