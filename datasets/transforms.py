@@ -30,7 +30,8 @@ def crop(image, target, region):
     # should we do something wrt the original size?
     target["size"] = torch.tensor([h, w])
 
-    fields = ["labels", "area", "iscrowd"]
+    # fields = ["labels", "area", "iscrowd"]
+    fields = ["labels"]
 
     if "boxes" in target:
         boxes = target["boxes"]
@@ -119,6 +120,7 @@ def resize(image, target, size, max_size=None):
     ratio_width, ratio_height = ratios
 
     target = target.copy()
+    # print(target)
     if "boxes" in target:
         boxes = target["boxes"]
         scaled_boxes = boxes * torch.as_tensor([ratio_width, ratio_height, ratio_width, ratio_height])
