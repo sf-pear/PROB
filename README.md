@@ -164,8 +164,8 @@ bash run_slurm.sh
 Let's say you want to add a dataset "DATASET_A". Then you need to:
 
 1. Add to the dictionary VOC_COCO_CLASS_NAMES a key-value pair: VOC_COCO_CLASS_NAMES["DATASET_A"]=["a","b","c",...]
-2. Store DATASET_A's images under "data/OWOD/JPEGImages/DATASET_A/"
-3. Store DATASET_A's Annotations under "data/OWOD/Annotations/DATASET_A/"
+2. Store DATASET_A's images under "data/OWOD/JPEGImages/"
+3. Store DATASET_A's Annotations under "data/OWOD/Annotations/"
 4. Store DATASET_A's ImageSets files under "data/OWOD/ImageSets/DATASET_A/"
 5. When you train, the input --dataset should be set to DATASET_A (e.g., --dataset DATASET_A)
 
