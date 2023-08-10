@@ -130,8 +130,13 @@ dmypy.json
 
 # fathomnet
 data/OWOD/Annotations/*
-data/OWOD/ImageSets/*
 data/OWOD/JPEGImages/*
 wandb
 exps/*
 models/dino_resnet50_pretrain.pth
+results.pkl
+
+# fathomnet specific
+data/OWOD/prob-voc-data.tar.xz 
+data/OWOD/data-training-notes.md
+results.ipynb
